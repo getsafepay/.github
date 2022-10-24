@@ -1,6 +1,6 @@
 ---
-name: New Issue
-about: Issue template
+name: Create a new issue
+about: Use this template to quickly add details about the issue
 title: ''
 labels: ''
 assignees: ''
