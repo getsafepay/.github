@@ -1,4 +1,4 @@
-# Safepay Code of Conduct
+# Safepay public templates
 
 This repository contains templates for Pull Requests and Issues that will be adopted across the organization.
 
