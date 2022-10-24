@@ -17,6 +17,6 @@ Browser:
 
 Environment:
 
-- [] Production
-- [] Sandbox
-- [] Development
+- [ ] Production
+- [ ] Sandbox
+- [ ] Development
