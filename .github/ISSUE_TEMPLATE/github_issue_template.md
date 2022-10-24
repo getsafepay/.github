@@ -1,3 +1,12 @@
+---
+name: New Issue
+about: Issue template
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 ## I'm submitting a ...
 
 - [ ] bug report
