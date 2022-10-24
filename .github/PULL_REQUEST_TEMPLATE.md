@@ -13,11 +13,13 @@ Please delete options that are not relevant.
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] This change requires a documentation update
 
-* **What is the current behavior?** (You can also link to an open issue here)
+## Description
 
-* **What is the new behavior (if this is a feature change)?**
+1. **What is the current behavior?** (You can also link to an open issue here)
 
-* **Does this PR introduce a breaking change?** (What changes might users need to make in their application due to this PR?)
+2. **What is the new behavior (if this is a feature change)?**
+
+3. **Does this PR introduce a breaking change?** (What changes might users need to make in their application due to this PR?)
 
 # How Has This Been Tested?
 
