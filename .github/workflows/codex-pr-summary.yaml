@@ -32,15 +32,22 @@ jobs:
           git fetch --no-tags origin \
             ${{ github.event.pull_request.base.ref }} \
             +refs/pull/${{ github.event.pull_request.number }}/head
+
+      # 1) Checkout the shared `.github` repo into a subdirectory
+      - name: Checkout shared workflows & prompts
+        uses: actions/checkout@v5
+        with:
+          repository: getsafepay/.github
+          path: .github
       #
-      # 1) Run Codex to SUMMARIZE the PR for the description
+      # 2) Run Codex to SUMMARIZE the PR for the description
       #
       - name: Codex PR summary
         id: codex_summary
         uses: openai/codex-action@v1
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
-          prompt-file: .github/codex/prompts/pr-summary.md
+          prompt-file: .github/prompts/pr-summary.md
 
   #
   # Post feedback job: post review comment + update PR body
