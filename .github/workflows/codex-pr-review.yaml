@@ -38,7 +38,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           repository: getsafepay/.github
-          path: .github
+          path: codex
       #
       # 2) Run Codex to REVIEW the PR
       #
@@ -47,7 +47,7 @@ jobs:
         uses: openai/codex-action@v1
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
-          prompt-file: .github/prompts/pr-review.md
+          prompt-file: ../codex/.github/prompts/pr-review.md
 
   #
   # Post feedback job: post review comment + update PR body
