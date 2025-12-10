@@ -71,7 +71,7 @@ jobs:
   #
   post_feedback:
     runs-on: ubuntu-latest
-    needs: codex_pr_analysis
+    needs: codex_pr_summary
 
     permissions:
       pull-requests: write
@@ -79,10 +79,10 @@ jobs:
 
     steps:
       - name: Update PR description with Codex summary
-        if: needs.codex_pr_analysis.outputs.summary_message != ''
+        if: needs.codex_pr_summary.outputs.summary_message != ''
         uses: actions/github-script@v7
         env:
-          CODEX_SUMMARY: ${{ needs.codex_pr_analysis.outputs.summary_message }}
+          CODEX_SUMMARY: ${{ needs.codex_pr_summary.outputs.summary_message }}
         with:
           github-token: ${{ github.token }}
           script: |
