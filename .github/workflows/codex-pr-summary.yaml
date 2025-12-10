@@ -40,31 +40,7 @@ jobs:
         uses: openai/codex-action@v1
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
-          prompt: |
-            You are writing a **high-level summary** for the PR description.
-
-            Repository: ${{ github.repository }}
-            PR number:  ${{ github.event.pull_request.number }}
-
-            Consider ONLY the changes in this PR. You may use commands like:
-              git diff --stat ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}
-              git diff ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}
-
-            Produce markdown that can be pasted into the PR description under a section "## Summary".
-
-            Format:
-            - A single-paragraph overview in 2–4 sentences.
-            - Then a bullet list:
-              - "Changes" — key user-facing and internal changes
-              - "Impact" — behavior changes, migrations, risks
-              - "Testing" — how it appears to be tested or what should be tested
-
-            Avoid mentioning that you are an AI or that you are Codex.
-
-            Current PR title and body:
-            ----
-            ${{ github.event.pull_request.title }}
-            ${{ github.event.pull_request.body }}
+          prompt-file: .github/codex/prompts/pr-summary.md
 
   #
   # Post feedback job: post review comment + update PR body

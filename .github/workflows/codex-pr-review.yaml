@@ -40,34 +40,7 @@ jobs:
         uses: openai/codex-action@v1
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
-          # Keep sandbox at default drop-sudo for safety.
-          prompt: |
-            You are acting as a senior engineer performing a code review.
-
-            Repository: ${{ github.repository }}
-            PR number:  ${{ github.event.pull_request.number }}
-
-            Review ONLY the changes introduced by this PR.
-            To explore changes you can run commands like:
-              git log --oneline ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}
-              git diff ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}
-
-            Focus on:
-            - Correctness and potential bugs
-            - Security & data handling concerns
-            - Performance implications where relevant
-            - Code style and maintainability
-            - Test coverage (missing or insufficient tests)
-
-            Output a concise markdown review with:
-            - "## Summary" — 2–5 bullet points
-            - "## Suggestions" — concrete recommendations grouped by file/area
-            - "## Risk" — short assessment of risk level (Low/Medium/High)
-
-            PR title and body:
-            ----
-            ${{ github.event.pull_request.title }}
-            ${{ github.event.pull_request.body }}
+          prompt-file: .github/codex/prompts/pr-review.md
 
   #
   # Post feedback job: post review comment + update PR body
