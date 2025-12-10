@@ -1,0 +1,122 @@
+name: Codex PR summary
+
+on:
+  workflow_call:
+    secrets:
+      OPENAI_API_KEY:
+        required: true
+
+jobs:
+  codex_pr_summary:
+    # This is the main job Codex runs in.
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read # Needed to checkout code
+      pull-requests: write # Needed to update PR body
+      issues: write # Needed to post PR comments
+
+    outputs:
+      review_message: ${{ steps.codex_review.outputs.final-message }}
+      summary_message: ${{ steps.codex_summary.outputs.final-message }}
+
+    steps:
+      - name: Checkout PR merge commit
+        uses: actions/checkout@v5
+        with:
+          # Check out the PR's merge commit so Codex sees the combined changes.
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+
+      - name: Pre-fetch base and head refs
+        run: |
+          git fetch --no-tags origin \
+            ${{ github.event.pull_request.base.ref }} \
+            +refs/pull/${{ github.event.pull_request.number }}/head
+      #
+      # 1) Run Codex to SUMMARIZE the PR for the description
+      #
+      - name: Codex PR summary
+        id: codex_summary
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt: |
+            You are writing a **high-level summary** for the PR description.
+
+            Repository: ${{ github.repository }}
+            PR number:  ${{ github.event.pull_request.number }}
+
+            Consider ONLY the changes in this PR. You may use commands like:
+              git diff --stat ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}
+              git diff ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}
+
+            Produce markdown that can be pasted into the PR description under a section "## Codex Summary".
+
+            Format:
+            - A single-paragraph overview in 2–4 sentences.
+            - Then a bullet list:
+              - "Changes" — key user-facing and internal changes
+              - "Impact" — behavior changes, migrations, risks
+              - "Testing" — how it appears to be tested or what should be tested
+
+            Avoid mentioning that you are an AI or that you are Codex.
+
+            Current PR title and body:
+            ----
+            ${{ github.event.pull_request.title }}
+            ${{ github.event.pull_request.body }}
+
+  #
+  # Post feedback job: post review comment + update PR body
+  #
+  post_feedback:
+    runs-on: ubuntu-latest
+    needs: codex_pr_analysis
+
+    permissions:
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Update PR description with Codex summary
+        if: needs.codex_pr_analysis.outputs.summary_message != ''
+        uses: actions/github-script@v7
+        env:
+          CODEX_SUMMARY: ${{ needs.codex_pr_analysis.outputs.summary_message }}
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const pull_number = context.payload.pull_request.number;
+
+            // Get current PR
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number,
+            });
+
+            const marker = '## Summary';
+            const summary = process.env.CODEX_SUMMARY;
+            const newSection = `${marker}\n\n${summary}\n`;
+
+            let body = pr.body || '';
+
+            if (body.includes(marker)) {
+              // Replace existing Codex Summary section
+              const pattern = new RegExp(`${marker}[\\s\\S]*$`);
+              body = body.replace(pattern, newSection);
+            } else {
+              // Append new section
+              if (body.trim().length > 0) {
+                body = `${body}\n\n${newSection}`;
+              } else {
+                body = newSection;
+              }
+            }
+
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number,
+              body,
+            });
