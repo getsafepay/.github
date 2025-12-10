@@ -41,7 +41,6 @@ jobs:
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           # Keep sandbox at default drop-sudo for safety.
-          safety-strategy: drop-sudo
           prompt: |
             You are acting as a senior engineer performing a code review.
 
@@ -78,7 +77,6 @@ jobs:
         uses: openai/codex-action@v1
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
-          safety-strategy: drop-sudo
           prompt: |
             You are writing a **high-level summary** for the PR description.
 
