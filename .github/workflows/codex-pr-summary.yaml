@@ -50,7 +50,7 @@ jobs:
               git diff --stat ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}
               git diff ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}
 
-            Produce markdown that can be pasted into the PR description under a section "## Codex Summary".
+            Produce markdown that can be pasted into the PR description under a section "## Summary".
 
             Format:
             - A single-paragraph overview in 2–4 sentences.
