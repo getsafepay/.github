@@ -1,18 +1,16 @@
 username: Ziyad Parekh CI
 icon_url: https://octodex.github.com/images/mona-the-rivetertocat.png
 
-# This shows above the attachment with the green bar
-pretext: "Daily open pull requests for org {{ env.ORG_NAME }}"
-
-title: "Daily Open PRs"
+pretext: "Daily open pull requests for {{ env.ORG_NAME }}/{{ env.REPO_NAME }}"
+title: "Open PRs – {{ env.REPO_NAME }}"
 title_link: "{{workflowRunUrl}}"
 
-# IMPORTANT: use triple braces so Markdown and backticks are not HTML-escaped.
+# Use triple braces so Markdown + links are not HTML-escaped
 text: |
   {{{ env.PR_REPORT }}}
 
 fallback: |-
-  [GitHub] Daily open PRs report for {{ env.ORG_NAME }}
+  [GitHub] Open PRs for {{ env.ORG_NAME }}/{{ env.REPO_NAME }}
 
 fields:
   - title: Workflow

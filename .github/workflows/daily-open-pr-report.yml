@@ -11,8 +11,30 @@ jobs:
   daily-open-pr-report:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        repo:
+          - trojan-order
+          - trojan-hypersource
+          - go-pay
+          - gotils
+          - safepay-raast
+          - safepay-notify
+          - trojan-user
+          - trojan-client
+          - trojan-auth
+          - safepay-dashboard
+          - safepay-embedded
+          - safepay-atoms
+          - safepay-drops
+          - safepay-skynet
+          - safepay-vasp
+          - librarian
+          - safepay-reporter
+
     env:
       ORG_NAME: getsafepay
+      REPO_NAME: ${{ matrix.repo }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_PR_SUMMARY_WEBHOOK_URL }}
 
     permissions:
@@ -38,6 +60,7 @@ jobs:
             await buildReport({ github, core });
 
       - name: Send Slack report
+        if: env.HAS_PRS == 'true'
         uses: act10ns/slack@v1
         env:
           SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
@@ -45,4 +68,3 @@ jobs:
           status: success
           channel: "@Ziyad Parekh"
           config: ./codex/.github/slack/slack-daily-pr-report-format.yaml
-        if: always()
