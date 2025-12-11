@@ -1,0 +1,46 @@
+name: Daily Open PRs to Slack
+
+on:
+  schedule:
+    # GitHub Actions uses UTC; Pakistan is UTC+5.
+    # 06:00 UTC = 11:00 PKT
+    - cron: "0 6 * * *"
+  workflow_dispatch: {} # optional manual trigger
+
+jobs:
+  daily-open-pr-report:
+    runs-on: ubuntu-latest
+
+    env:
+      ORG_NAME: getsafepay
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_PR_SUMMARY_WEBHOOK_URL }}
+
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
+
+    steps:
+      - name: Checkout .github repo (scripts & config)
+        uses: actions/checkout@v5
+        with:
+          repository: getsafepay/.github
+          path: codex
+
+      - name: Build open PR report
+        uses: actions/github-script@v7
+        env:
+          ORG_NAME: ${{ env.ORG_NAME }}
+        with:
+          github-token: ${{ secrets.ZP_CICD_TOKEN }}
+          script: |
+            const buildReport = require('./codex/.github/scripts/build-open-pr-report.js');
+            await buildReport({ github, core });
+
+      - name: Send Slack report
+        uses: act10ns/slack@v1
+        with:
+          status: success
+          channel: "@Ziyad Parekh"
+          config: ./codex/.github/slack/slack-daily-pr-report.yml
+        if: always()
