@@ -44,5 +44,5 @@ jobs:
         with:
           status: success
           channel: "@Ziyad Parekh"
-          config: ./codex/.github/slack/slack-daily-pr-report.yml
+          config: ./codex/.github/slack/slack-daily-pr-report-format.yaml
         if: always()
