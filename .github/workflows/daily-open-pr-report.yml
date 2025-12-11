@@ -39,6 +39,8 @@ jobs:
 
       - name: Send Slack report
         uses: act10ns/slack@v1
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         with:
           status: success
           channel: "@Ziyad Parekh"
