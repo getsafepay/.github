@@ -3,7 +3,6 @@ icon_url: https://octodex.github.com/images/mona-the-rivetertocat.png
 
 pretext: "Weekly open pull requests for {{ env.ORG_NAME }}/{{ env.REPO_NAME }}"
 title: "Open PRs – {{ env.REPO_NAME }}"
-title_link: "{{workflowRunUrl}}"
 
 # Use triple braces so Markdown + links are not HTML-escaped
 text: |
@@ -11,20 +10,6 @@ text: |
 
 fallback: |-
   [GitHub] Open PRs for {{ env.ORG_NAME }}/{{ env.REPO_NAME }}
-
-fields:
-  - title: Workflow
-    value: "<{{workflowUrl}}|{{workflow}}>"
-    short: true
-  - title: Run Number
-    value: "{{runNumber}}"
-    short: true
-  - title: Actor
-    value: "{{actor}}"
-    short: true
-
-footer: >-
-  <{{repositoryUrl}}|{{repositoryName}}> {{workflow}} #{{runNumber}}
 
 colors:
   success: "#0F9D58"
