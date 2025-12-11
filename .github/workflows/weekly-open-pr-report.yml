@@ -1,14 +1,14 @@
-name: Daily Open PRs to Slack
+name: Weekly Open PRs to Slack
 
 on:
   schedule:
     # GitHub Actions uses UTC; Pakistan is UTC+5.
     # 06:00 UTC = 11:00 PKT
-    - cron: "0 6 * * *"
+    - cron: "0 6 * * 1"
   workflow_dispatch: {} # optional manual trigger
 
 jobs:
-  daily-open-pr-report:
+  weekly-open-pr-report:
     runs-on: ubuntu-latest
 
     strategy:

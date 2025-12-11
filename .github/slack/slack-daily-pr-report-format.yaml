@@ -1,7 +1,7 @@
 username: Ziyad Parekh CI
 icon_url: https://octodex.github.com/images/mona-the-rivetertocat.png
 
-pretext: "Daily open pull requests for {{ env.ORG_NAME }}/{{ env.REPO_NAME }}"
+pretext: "Weekly open pull requests for {{ env.ORG_NAME }}/{{ env.REPO_NAME }}"
 title: "Open PRs – {{ env.REPO_NAME }}"
 title_link: "{{workflowRunUrl}}"
 
