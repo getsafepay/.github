@@ -8,6 +8,11 @@ on:
 
 jobs:
   codex_pr_review:
+    # Disabled: the OpenAI API account backing this action has no credits
+    # remaining, causing every caller repo's PR checks to fail on an
+    # unrelated infra issue. Remove this `if: false` once credits are
+    # restored.
+    if: false
     # This is the main job Codex runs in.
     runs-on: ubuntu-latest
 
